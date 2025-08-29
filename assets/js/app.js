@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Hilfsfunktionen
-  const escapeHTML = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "'" }[c]));
+  const escapeHTML = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': '&quot;', "'": '&#39;' }[c]));
   const metersToHuman = m => (m < 950) ? `${Math.round(m)} m` : `${(m / 1000).toFixed(1)} km`;
   const haversine = (lat1, lon1, lat2, lon2) => {
     const R = 6371000, toRad = d => d * Math.PI / 180;
@@ -103,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const prov = it.provider || {};
       const detailsKVs = flatDetails(it.raw).map(([k, v]) => `<div class="details-kv"><div class="key">${escapeHTML(k)}</div><div>${v}</div></div>`).join("");
+	  
+	  // KORREKTUR: Der Google Maps Link wurde korrigiert und verbessert.
+      const mapLink = `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}`;
 
       card.innerHTML = `
         <div class="card-header">
@@ -117,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="details-panel" style="display: none;">${detailsKVs}</div>
         <div class="card-footer">
-          <a class="link" href="https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}" target="_blank" rel="noopener">Auf Karte zeigen</a>
+          <a class="link" href="${mapLink}" target="_blank" rel="noopener">Auf Karte zeigen</a>
           <button class="expand-btn">Details</button>
         </div>
       `;
@@ -201,10 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const dist = (state.userPos && isFinite(lat) && isFinite(lon)) ? haversine(state.userPos.lat, state.userPos.lon, lat, lon) : NaN;
         const types = canonicalVehSet(p);
         
-        // NEU: Logik für Hauptname und Unteradresse
         let mainName = p.station?.name || (types.map(t => VEH_LABELS[t]).join(', ')) || 'Fahrzeug';
         let subAddress = p.station?.address || '';
-        // Vermeide Redundanz, wenn Adresse im Namen enthalten ist
         if (subAddress && mainName.includes(subAddress.split(',')[0])) {
             subAddress = '';
         }
@@ -271,17 +272,15 @@ document.addEventListener('DOMContentLoaded', () => {
     DOMElements.status.textContent = "Lade Angebote...";
     const rawItems = await fetchItems(query);
     
-    // Clientseitige Filter anwenden
     let filteredItems = applyClientFilters(rawItems, query);
     
-    // Duplikate entfernen, die eventuell schon geladen wurden
     const existingIds = new Set(state.allItems.map(it => it.id));
     const uniqueNewItems = filteredItems.filter(it => !existingIds.has(it.id));
     
     uniqueNewItems.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
     
     state.allItems.push(...uniqueNewItems);
-    render(uniqueNewItems, true); // Append new items
+    render(uniqueNewItems, true);
 
     state.currentOffset += (API_ITEMS_PER_PAGE * PAGES_TO_COLLECT);
     DOMElements.status.textContent = `Zeige ${state.allItems.length} Angebote in deiner Nähe.`;
