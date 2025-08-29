@@ -3,7 +3,8 @@
 Mobile-first Webapp zum Finden von Autos, Scootern, Velos und weiteren Shared-Mobility-Angeboten in deiner Nähe.  
 Die App fragt beim Laden den Standort ab, ruft die offizielle Shared-Mobility-API via PHP-Proxy auf, sortiert nach Distanz und zeigt alles in einer übersichtlichen Tabelle mit Piktogrammen, Detail-Accordion und Google-Maps-Links.
 
-<img width="1535" height="990" alt="image" src="https://github.com/user-attachments/assets/f891e44e-f7c1-427b-8c35-6f1c745aa423" />
+<img width="1236" height="1091" alt="image" src="https://github.com/user-attachments/assets/23fb7512-6209-493d-8dc0-68d125f4f41d" />
+
 
 
 ## Features
