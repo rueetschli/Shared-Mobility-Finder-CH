@@ -40,9 +40,6 @@ Seite unter index.php aufrufen, Standortfreigabe erlauben.
 ## Credits
 Datenquelle und API: Shared Mobility API von sharedmobility.ch bzw. Bundesamt für Energie (BFE)
 Zugriff: https://api.sharedmobility.ch/ mit Base-Pfad /v1/sharedmobility
-Dokumentation gemäss bereitgestellten Endpunkten in deiner Beschreibung.
-
 Kartenlink: Google Maps „Search“ Linkformat https://www.google.com/maps/search/?api=1&query=LAT,LON.
-
 Ohne diese offenen Daten wäre dieses Projekt nicht möglich. Danke an das BFE und sharedmobility.ch.
 
